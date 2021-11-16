@@ -1,3 +1,3 @@
 [submodule "libocispec"]
 	path = libocispec
-	url = https://github.com/containers/libocispec.git
+	url = git@github.com:containers/libocispec.git
