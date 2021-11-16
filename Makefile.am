@@ -16,7 +16,7 @@ srpm: dist-gzip rpm/crun.spec
 
 CLEANFILES = crun.spec
 
-lib_LTLIBRARIES = libcrun.la
+lib_LTLIBRARIES = libcrun.la librunf.la
 
 check_LIBRARIES = libcrun_testing.a
 
@@ -35,6 +35,8 @@ libcrun_SOURCES = src/libcrun/utils.c \
 			src/libcrun/signals.c \
 			src/libcrun/seccomp_notify.c
 
+librunf_SOURCES = src/librunf/container.c
+
 if HAVE_EMBEDDED_YAJL
 maybe_libyajl.la = libocispec/yajl/libyajl.la
 else
@@ -48,6 +50,12 @@ libcrun_la_SOURCES = $(libcrun_SOURCES)
 libcrun_la_CFLAGS = -I $(abs_top_builddir)/libocispec/src -I $(abs_top_srcdir)/libocispec/src -fvisibility=hidden
 libcrun_la_LIBADD = libocispec/libocispec.la $(FOUND_LIBS) $(maybe_libyajl.la)
 libcrun_la_LDFLAGS = -Wl,--version-script=$(abs_top_srcdir)/libcrun.lds
+
+# librunf configuration
+librunf_la_SOURCES = $(librunf_SOURCES)
+librunf_la_CFLAGS = -I $(abs_top_builddir)/libocispec/src -I $(abs_top_srcdir)/libocispec/src -fvisibility=hidden
+librunf_la_LIBADD = libocispec/libocispec.la $(FOUND_LIBS) $(maybe_libyajl.la)
+librunf_la_LDFLAGS = -Wl,--version-script=$(abs_top_srcdir)/librunf.lds
 
 # build a version with all the symbols visible for testing
 libcrun_testing_a_SOURCES = $(libcrun_SOURCES)
@@ -66,7 +74,7 @@ crun_CFLAGS = -I $(abs_top_builddir)/libocispec/src -I $(abs_top_srcdir)/libocis
 crun_SOURCES = src/crun.c src/run.c src/delete.c src/kill.c src/pause.c src/unpause.c src/spec.c \
 		src/exec.c src/list.c src/create.c src/start.c src/state.c src/update.c src/ps.c \
 		src/checkpoint.c src/restore.c
-crun_LDADD = libcrun.la $(FOUND_LIBS) $(maybe_libyajl.la)
+crun_LDADD = libcrun.la librunf.la $(FOUND_LIBS) $(maybe_libyajl.la)
 crun_LDFLAGS = $(CRUN_LDFLAGS)
 
 EXTRA_DIST = COPYING COPYING.libcrun README.md NEWS SECURITY.md rpm/crun.spec.in autogen.sh \
@@ -76,6 +84,7 @@ EXTRA_DIST = COPYING COPYING.libcrun README.md NEWS SECURITY.md rpm/crun.spec.in
 	src/libcrun/container.h src/libcrun/seccomp.h src/libcrun/ebpf.h src/libcrun/cgroup.h \
 	src/libcrun/linux.h src/libcrun/utils.h src/libcrun/error.h src/libcrun/criu.h \
 	src/libcrun/status.h src/libcrun/terminal.h \
+	src/librunf/container.h \
 	src/libcrun/intprops.h crun.1.md crun.1 libcrun.lds
 
 UNIT_TESTS = tests/tests_libcrun_utils tests/tests_libcrun_errors

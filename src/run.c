@@ -27,6 +27,7 @@
 #include "crun.h"
 #include "libcrun/container.h"
 #include "libcrun/utils.h"
+#include "librunf/container.h"
 
 static char doc[] = "OCI runtime";
 
@@ -177,5 +178,6 @@ crun_command_run (struct crun_global_arguments *global_args, int argc, char **ar
       crun_context.preserve_fds += crun_context.listen_fds;
     }
 
-  return libcrun_container_run (&crun_context, container, 0, err);
+  //return libcrun_container_run (&crun_context, container, 0, err);
+  return librunf_vsandbox_run (0);
 }
