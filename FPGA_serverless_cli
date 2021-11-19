@@ -1,0 +1,128 @@
+#!/bin/bash
+
+function run_startup_test(){
+	echo "Run (FPGA function startup breakdown) test (each case takes 30-100s)"
+
+	echo "[Case-1] Startup With-Erase)"
+	echo -e "\tErase takes:"
+	time fpga-clear-local-image -S 0 > /dev/null 2>&1
+	echo -e "\tLoad image takes:"
+	time fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
+	echo -e "\tPrepare sandbox and run:"
+	../vsandbox-runtime/crun run demo-sandbox
+
+	sleep 2
+
+	echo "[Case-2] Startup Without-Erase"
+	## Prepare env
+	fpga-clear-local-image -S 0 > /dev/null 2>&1
+	fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
+
+	echo -e "\tErase takes: 0 us"
+	echo -e "\tLoad image takes:"
+	time fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
+	echo -e "\tPrepare sandbox and run:"
+	../vsandbox-runtime/crun run demo-sandbox
+
+	sleep 2
+
+	echo "[Case-3] Startup with Warm Image"
+	## Prepare env
+	fpga-clear-local-image -S 0 > /dev/null 2>&1
+	fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
+
+	echo -e "\tErase takes: 0 us"
+	echo -e "\tLoad image takes: 0 us"
+	echo -e "\tPrepare sandbox and run:"
+	../vsandbox-runtime/crun run demo-sandbox
+
+	echo "[Case-4] Startup with Warm Sandbox"
+	echo -e "\tErase takes: 0 us"
+	echo -e "\tLoad image takes: 0 us"
+	echo -e "\tPrepare sandbox and run:"
+	../vsandbox-runtime/crun run demo-sandbox
+
+	echo "Test finished"
+}
+
+
+# Arg1: FPGA slot
+function fpga_erase(){
+	sudo fpga-clear-local-image -S $1 > /dev/null 2>&1
+	echo Erase FPGA image/functions success
+}
+
+# Arg1: vsandbox-name (use global ID, agfi, now)
+# It assumes only using the slot-0 of FPGA
+function fpga_cache(){
+	sudo fpga-load-local-image -S 0 -I $1
+	agfi-07e78ae51ee88587e
+	echo Erase FPGA image/functions success
+}
+
+function run_all(){
+	##Clean
+	docker stop $(docker ps -aq) > /dev/null 2>&1
+
+	# 1. front-end -> interact
+	run_test front-interact
+
+	# 2. interact-smarthome
+	run_test interact-smarthome
+
+	# # # 3. smarthome-door
+	run_test smarthome-door
+
+	# # # 4. smarthome-light
+	run_test smarthome-light
+
+	##Clean
+	docker stop $(docker ps -aq) > /dev/null 2>&1
+}
+
+function print_usage(){
+	echo "FPGA_serverless_cli [args]"
+	echo "args:"
+	echo "-e: erase FPGA image (vsandbox) in local FPGAs, arguments is FPGA-slot, e.g., -c 0"
+	echo "-c: cache a vsandbox FPGA image, e.g., -c vsandbox-name"
+	echo "-w: warm a vsandbox FPGA function, e.g., -w vsandbox-name"
+	echo "-h: Print the help info"
+	echo "-b: run benchmarks for FPGA functions (startup), e.g., -b"
+}
+
+while getopts ":habc:R:E:r:e:w:" opt; do
+	case $opt in
+		b)
+			run_startup_test
+			exit
+			;;
+		h)
+			print_usage
+			exit
+			;;
+		e)
+			fpga_erase $OPTARG
+			exit
+			;;
+		c)
+			fpga_cache $OPTARG
+			exit
+			;;
+		w)
+			fpga_warm $OPTARG
+			exit
+			;;
+		:)
+			echo "Option -$OPTARG requires an argument".
+			exit
+			;;
+		?)
+			echo "Invalid option: -$OPTARG index:$OPTIND"
+			exit
+			;;
+	esac
+done
+
+# In case no args passed
+print_usage
+
