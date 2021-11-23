@@ -18,14 +18,34 @@
 #define _GNU_SOURCE
 
 #include <stdlib.h>
+#include "../libcrun/container.h"
+#include <stdio.h>
+#include <string.h>
 
 #define PATH "/home/centos/src/project_data/aws-fpga/Vitis/helloworld_genbin/"
 #define INVOKER "func_invoker"
 #define FUNC_NAME "fpga_func.awsxclbin"
 
 int
-librunf_vsandbox_run (unsigned int options)
+librunf_vsandbox_run (libcrun_container_t *container, unsigned int options)
 {
-	return system(PATH INVOKER " " PATH FUNC_NAME);
-}
+	/* TODO(DD): We should check the length to avoid too long args */
+	char cmd[256];
+	char** args = container->container_def->process->args;
+	int args_len = container->container_def->process->args_len;
+	int i;
 
+	if (args == NULL || args_len ==0) {
+		strcpy (cmd, PATH INVOKER " " PATH FUNC_NAME "\0");
+	} else {
+		strcpy(cmd, args[0]);
+		for (i=1; i<args_len; i++){
+			strcat(cmd, " ");
+			strcat (cmd, args[i]);
+		}
+		strcat (cmd, "\0");
+	}
+
+	//fprintf(stderr, "[Molecule@%s] cmd: %s\n", __func__, cmd);
+	return system(cmd);
+}

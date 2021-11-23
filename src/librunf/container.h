@@ -16,10 +16,12 @@
  * along with crun.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef RUNF_CONTAINER_H
+#define RUNF_CONTAINER_H
 
-LIBCRUN_PUBLIC int librunf_vsandbox_run (unsigned int options);
+#include "../libcrun/container.h"
+
+LIBCRUN_PUBLIC int librunf_vsandbox_run (libcrun_container_t *container, unsigned int options);
 
 #if 0
 LIBCRUN_PUBLIC int libcrun_container_delete (libcrun_context_t *context, runtime_spec_schema_config_schema *def,

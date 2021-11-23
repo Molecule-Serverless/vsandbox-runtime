@@ -179,5 +179,5 @@ crun_command_run (struct crun_global_arguments *global_args, int argc, char **ar
     }
 
   //return libcrun_container_run (&crun_context, container, 0, err);
-  return librunf_vsandbox_run (0);
+  return librunf_vsandbox_run (container, 0);
 }
