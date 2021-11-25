@@ -70,12 +70,12 @@ python_crun_la_LDFLAGS = -avoid-version -module $(PYTHON_LDFLAGS)
 python_crun_la_LIBADD = libcrun.la $(PYTHON_LIBS) $(FOUND_LIBS) $(maybe_libyajl.la)
 endif
 
-crun_CFLAGS = -I $(abs_top_builddir)/libocispec/src -I $(abs_top_srcdir)/libocispec/src
-crun_SOURCES = src/crun.c src/run.c src/delete.c src/kill.c src/pause.c src/unpause.c src/spec.c \
+vsandbox_CFLAGS = -I $(abs_top_builddir)/libocispec/src -I $(abs_top_srcdir)/libocispec/src
+vsandbox_SOURCES = src/crun.c src/run.c src/delete.c src/kill.c src/pause.c src/unpause.c src/spec.c \
 		src/exec.c src/list.c src/create.c src/start.c src/state.c src/update.c src/ps.c \
 		src/checkpoint.c src/restore.c
-crun_LDADD = libcrun.la librunf.la $(FOUND_LIBS) $(maybe_libyajl.la)
-crun_LDFLAGS = $(CRUN_LDFLAGS)
+vsandbox_LDADD = libcrun.la librunf.la $(FOUND_LIBS) $(maybe_libyajl.la)
+vsandbox_LDFLAGS = $(CRUN_LDFLAGS)
 
 EXTRA_DIST = COPYING COPYING.libcrun README.md NEWS SECURITY.md rpm/crun.spec.in autogen.sh \
 	src/crun.h src/list.h src/run.h src/delete.h src/kill.h src/pause.h src/unpause.h \
@@ -89,7 +89,7 @@ EXTRA_DIST = COPYING COPYING.libcrun README.md NEWS SECURITY.md rpm/crun.spec.in
 
 UNIT_TESTS = tests/tests_libcrun_utils tests/tests_libcrun_errors
 
-bin_PROGRAMS = crun
+bin_PROGRAMS = vsandbox
 noinst_PROGRAMS = tests/init $(UNIT_TESTS) tests/tests_libcrun_fuzzer
 
 TESTS_LDADD = libcrun_testing.a $(FOUND_LIBS) $(maybe_libyajl.la)

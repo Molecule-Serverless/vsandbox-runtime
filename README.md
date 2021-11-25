@@ -1,4 +1,10 @@
-# crun
+# Vectorized Sandbox (vsandbox)
+
+vsandbox is an sandbox runtime designed for heterogeneous devices.
+The code is modified from crun, which is an OCI runtime writen in C.
+
+
+# Old README of crun
 
 [![Coverity Status](https://scan.coverity.com/projects/17787/badge.svg)](https://scan.coverity.com/projects/giuseppe-crun)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/containers/crun.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/containers/crun/alerts/)

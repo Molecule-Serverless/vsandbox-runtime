@@ -45,6 +45,7 @@ build-aux/ltmain.sh
 build-aux/missing
 build-aux/tap-driver.sh
 crun
+vsandbox
 /config.h
 /config.h.in
 /config.log
