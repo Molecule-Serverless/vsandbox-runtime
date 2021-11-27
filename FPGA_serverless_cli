@@ -11,7 +11,7 @@ function run_startup_test(){
 	#time fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
 	\time -f "\t\t%E (minutes:seconds)" fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e | grep minutes
 	echo -e "\tPrepare sandbox and run:"
-	../vsandbox-runtime/crun run demo-sandbox | grep "startup breakdown"
+	../vsandbox-runtime/vsandbox run demo-sandbox | grep "startup breakdown"
 
 	sleep 2
 
@@ -25,7 +25,7 @@ function run_startup_test(){
 	\time -f "\t\t%E (minutes:seconds)" fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e | grep minutes
 	#time fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
 	echo -e "\tPrepare sandbox and run:"
-	../vsandbox-runtime/crun run demo-sandbox | grep "startup breakdown"
+	../vsandbox-runtime/vsandbox run demo-sandbox | grep "startup breakdown"
 
 	sleep 2
 
@@ -37,13 +37,13 @@ function run_startup_test(){
 	echo -e "\tErase takes: 0 us"
 	echo -e "\tLoad image takes: 0 us"
 	echo -e "\tPrepare sandbox and run:"
-	../vsandbox-runtime/crun run demo-sandbox | grep "startup breakdown"
+	../vsandbox-runtime/vsandbox run demo-sandbox | grep "startup breakdown"
 
 	echo "[Case-4] Startup with Warm Sandbox"
 	echo -e "\tErase takes: 0 us"
 	echo -e "\tLoad image takes: 0 us"
 	echo -e "\tPrepare sandbox and run:"
-	../vsandbox-runtime/crun run demo-sandbox | grep "startup breakdown"
+	../vsandbox-runtime/vsandbox run demo-sandbox | grep "startup breakdown"
 
 	echo "Test finished"
 }
