@@ -118,6 +118,9 @@ static const char spec_file[] = "\
 		\"args\": [\n\
 			\"sh\"\n\
 		],\n\
+		\"vargs\": [\n\
+			\"fpga_func_invoker fpga_func_demo\"\n\
+		],\n\
 		\"env\": [\n\
 			\"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\n\
 			\"TERM=xterm\"\n\

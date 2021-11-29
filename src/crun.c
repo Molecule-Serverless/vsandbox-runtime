@@ -139,7 +139,7 @@ static char doc[] = "\nCOMMANDS:\n"
 #ifdef HAVE_CRIU
                     "\trestore     - restore a container\n"
 #endif
-                    "\trun         - run a container\n"
+                    "\trun         - run a vector of containers (vsandbox)\n"
                     "\tspec        - generate a configuration file\n"
                     "\tstart       - start a container\n"
                     "\tstate       - output the state of a container\n"

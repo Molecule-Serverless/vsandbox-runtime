@@ -60,7 +60,7 @@ static struct argp_option options[]
             0,
         } };
 
-static char args_doc[] = "run [OPTION]... CONTAINER";
+static char args_doc[] = "run [OPTION]... vector<CONTAINER>";
 
 static const char *config_file = "config.json";
 
@@ -131,7 +131,8 @@ crun_command_run (struct crun_global_arguments *global_args, int argc, char **ar
   crun_context.handler = global_args->handler;
 
   argp_parse (&run_argp, argc, argv, ARGP_IN_ORDER, &first_arg, &crun_context);
-  crun_assert_n_args (argc - first_arg, 1, 1);
+  // we hardcoded 128 as the maxmum args now
+  crun_assert_n_args (argc - first_arg, 1, 128);
 
   /* Make sure the config is an absolute path before changing the directory.  */
   if ((strcmp ("config.json", config_file) != 0))

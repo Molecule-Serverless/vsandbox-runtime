@@ -31,21 +31,27 @@ librunf_vsandbox_run (libcrun_container_t *container, unsigned int options)
 {
 	/* TODO(DD): We should check the length to avoid too long args */
 	char cmd[256];
-	char** args = container->container_def->process->args;
-	int args_len = container->container_def->process->args_len;
+	char** vargs = container->container_def->process->vargs;
+	int vargs_len = container->container_def->process->vargs_len;
 	int i;
 
-	if (args == NULL || args_len ==0) {
+#if 0 /* Debug code, printing all sandboxes */
+	for (i=0; i<container->container_def->process->vargs_len; i++) {
+		fprintf(stderr, "[VSandbox] sandbox-%d: %s\n", i,
+				container->container_def->process->vargs[i]);
+	}
+#endif
+
+	if (vargs == NULL || vargs_len ==0) {
 		strcpy (cmd, PATH INVOKER " " PATH FUNC_NAME "\0");
+		system(cmd);
 	} else {
-		strcpy(cmd, args[0]);
-		for (i=1; i<args_len; i++){
-			strcat(cmd, " ");
-			strcat (cmd, args[i]);
+		for (i=0; i<vargs_len; i++){
+			strcpy(cmd, vargs[i]);
+			strcat (cmd, "\0");
+			system(cmd);
 		}
-		strcat (cmd, "\0");
 	}
 
-	//fprintf(stderr, "[Molecule@%s] cmd: %s\n", __func__, cmd);
-	return system(cmd);
+	return 0;
 }
