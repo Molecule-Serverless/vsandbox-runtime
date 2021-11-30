@@ -6,44 +6,48 @@ function run_startup_test(){
 	echo "[Case-1] Startup With-Erase)"
 	echo -e "\tErase takes:"
 	#time fpga-clear-local-image -S 0 > /dev/null 2>&1
-	\time -f "\t\t%E (minutes:seconds)" fpga-clear-local-image -S 0 | grep minutes
+	sudo \time -f "\t\t%E (minutes:seconds)" fpga-clear-local-image -S 0 | grep minutes
 	echo -e "\tLoad image takes:"
 	#time fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
-	\time -f "\t\t%E (minutes:seconds)" fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e | grep minutes
+	sudo \time -f "\t\t%E (minutes:seconds)" fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e | grep minutes
 	echo -e "\tPrepare sandbox and run:"
 	../../../vsandbox-runtime/vsandbox run demo-sandbox | grep "startup breakdown"
+	echo ""
 
 	sleep 2
 
 	echo "[Case-2] Startup Without-Erase"
 	## Prepare env
-	fpga-clear-local-image -S 0 > /dev/null 2>&1
-	fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
+	sudo fpga-clear-local-image -S 0 > /dev/null 2>&1
+	sudo fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
 
 	echo -e "\tErase takes: 0 us"
 	echo -e "\tLoad image takes:"
-	\time -f "\t\t%E (minutes:seconds)" fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e | grep minutes
+	sudo \time -f "\t\t%E (minutes:seconds)" fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e | grep minutes
 	#time fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
 	echo -e "\tPrepare sandbox and run:"
 	../../../vsandbox-runtime/vsandbox run demo-sandbox | grep "startup breakdown"
+	echo ""
 
 	sleep 2
 
 	echo "[Case-3] Startup with Warm Image"
 	## Prepare env
-	fpga-clear-local-image -S 0 > /dev/null 2>&1
-	fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
+	sudo fpga-clear-local-image -S 0 > /dev/null 2>&1
+	sudo fpga-load-local-image -S 0 -I agfi-07e78ae51ee88587e > /dev/null 2>&1
 
 	echo -e "\tErase takes: 0 us"
 	echo -e "\tLoad image takes: 0 us"
 	echo -e "\tPrepare sandbox and run:"
 	../../../vsandbox-runtime/vsandbox run demo-sandbox | grep "startup breakdown"
+	echo ""
 
 	echo "[Case-4] Startup with Warm Sandbox"
 	echo -e "\tErase takes: 0 us"
 	echo -e "\tLoad image takes: 0 us"
 	echo -e "\tPrepare sandbox and run:"
 	../../../vsandbox-runtime/vsandbox run demo-sandbox | grep "startup breakdown"
+	echo ""
 
 	echo "Test finished"
 }
